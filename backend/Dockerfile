@@ -14,7 +14,7 @@ COPY prisma ./prisma/
 RUN npm ci
 
 # Generate Prisma client
-RUN npx prisma generate --schema=./prisma/schema.prisma
+RUN npx prisma generate
 
 # Copy source and compile
 COPY tsconfig.json ./
@@ -51,4 +51,5 @@ COPY --chown=node:node --from=builder /app/dist ./dist/
 EXPOSE 3001
 
 # Run migrations then start server
-CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma && node dist/index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+
