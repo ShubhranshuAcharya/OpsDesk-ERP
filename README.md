@@ -4,11 +4,82 @@ OpsDesk is a lightweight, internal ERP/CRM portal that lets Sales, Warehouse, an
 
 It implements strict role-based access control and reliable, auditable business logic (e.g., transactional stock deduction).
 
+## Why OpsDesk?
+
+OpsDesk tackles the business problem of siloed data between departments by centralizing customer management, CRM follow-ups, product/inventory operations, and sales challans. Designed for a wholesale/distribution workflow, it enforces role-based constraints across Sales, Warehouse, Accounts, and Admin teams while demonstrating robust full-stack engineering through transactional integrity, real-time metrics, and strict API authorization.
+
+## Live Demo
+
+- **Frontend UI**: `TBD`
+- **Backend API**: `TBD`
+
+## Recommended Demo Flow
+
+The fastest way to experience the full operational lifecycle:
+1. **Login as Admin** (`admin@example.com`) to explore the redesigned Reports analytics dashboard.
+2. **Login as Sales** (`sales@example.com`).
+3. Navigate to **Customers** and create a new customer lead.
+4. Navigate to **Sales Challans** and create a new challan for that customer, adding multiple line items.
+5. Save the challan as **Draft** and observe the pipeline state.
+6. **Confirm** the challan, and observe the immediate stock deduction.
+7. Click **Export PDF** on the confirmed challan detail page to generate the branded PDF.
+8. **Login as Warehouse** (`warehouse@example.com`) and navigate to the **Products & Inventory** module to view the documented "Net" stock movement history log reflecting the deduction.
+
+## Key Engineering Highlights
+
+- **Backend-Enforced RBAC**: Authorization middleware strictly locks down routing; frontend visibility is backed by genuine API-level enforcement.
+- **Strict Zod Validation**: End-to-end type safety and payload validation ensure malformed data is rejected before hitting the database.
+- **PostgreSQL Relational Model via Prisma**: Strongly typed ORM mapping with foreign keys, constraints, and cascading rules.
+- **Transactional Integrity**: Critical operations, like concurrent inventory stock deductions, utilize atomic database operations to prevent race conditions.
+- **Product Snapshot Preservation**: Sales challans store immutable snapshots of product pricing and data to maintain historical accuracy even if the underlying product changes.
+- **Animated Data Visualization**: The frontend leverages `framer-motion` and custom SVGs to render responsive, mathematically proportioned charts and overlapping cluster graphs.
+- **PDF Generation**: Server-side document rendering utilizing `pdfkit` for immediate browser streaming.
+- **GitHub Actions CI**: Automated linting and building workflows trigger on every push/PR to maintain codebase quality.
+
+## Role-Based Access
+
+| Capability | Admin | Sales | Warehouse | Accounts |
+|:---|:---:|:---:|:---:|:---:|
+| User Management | ✓ | — | — | — |
+| View Customers | ✓ | ✓ | — | ✓ |
+| Manage Customers/Follow-ups | ✓ | ✓ | — | — |
+| View Products & Inventory | ✓ | ✓ | ✓ | ✓ |
+| Adjust Inventory / View Logs | ✓ | — | ✓ | — |
+| Create Sales Challans | ✓ | ✓ | — | — |
+| View Sales Challans | ✓ | ✓ | ✓ | ✓ |
+| Access Reports Dashboard | ✓ | — | — | ✓ |
+| Export Challan PDF | ✓ | ✓ | ✓ | ✓ |
+
 ## Architecture Summary
 - **Frontend**: React + TypeScript, Tailwind CSS, TanStack Query, React Hook Form + Zod for client-side validation.
 - **Backend**: Node.js + TypeScript, Express.js, Prisma ORM, Zod for strict server-side validation.
 - **Database**: PostgreSQL (hosted on Neon).
 - **Authentication**: JWT based authentication with short-expiry tokens.
+
+### System Architecture Diagram
+```text
+Browser Client (React)
+          ↓
+  TanStack Query (Caching/Sync)
+          ↓
+  Vite / Nginx (Static Serving)
+          ↓
+=================================
+          ↓
+  Express REST API Layer
+          ↓
+  Authentication Middleware (JWT)
+          ↓
+  RBAC + Zod Validation Middleware
+          ↓
+  Business Logic (Controllers)
+          ↓
+  Prisma ORM (Data Access)
+          ↓
+=================================
+          ↓
+  PostgreSQL Database (Neon)
+```
 
 ## Local Setup Steps
 
@@ -82,7 +153,7 @@ It implements strict role-based access control and reliable, auditable business 
 
 ## Bonus Features
 
-### 1. Export Challan as PDF ✅ (Fully Working)
+### 1. Export Challan as PDF ✨ (Fully Working)
 
 A professional PDF export is available directly from any Challan Detail page.
 
@@ -91,7 +162,7 @@ A professional PDF export is available directly from any Challan Detail page.
 - Uses the endpoint `GET /api/challans/:id/pdf` — fully authenticated and role-protected.
 - PDF filenames follow the challan number format: `CH-2026-000001.pdf`.
 
-### 2. Docker Setup ✅ (Fully Working — tested locally)
+### 2. Docker Setup ✨ (Fully Working — tested locally)
 
 The entire stack can be run with a single command using Docker Compose.
 
@@ -126,7 +197,7 @@ docker compose down        # stop (data preserved)
 docker compose down -v     # DANGER: also destroys database volume
 ```
 
-### 3. GitHub Actions CI/CD ✅ (CI passing — deploy workflow implemented)
+### 3. GitHub Actions CI/CD ✨ (CI passing — deploy workflow implemented)
 
 Two workflow files are in `.github/workflows/`:
 
