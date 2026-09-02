@@ -184,8 +184,8 @@ Create Draft Challan
 -  Sensitive Field Protection so password hashes are not returned through normal API responses.
 -  Environment-based Secrets instead of committed credentials.
 
-##Security Trade-offs
-This is an assignment/MVP, so some hardening areas remain intentionally scoped:
+## Security Trade-offs
+   This is an assignment/MVP, so some hardening areas remain intentionally scoped:
 
 - JWTs are currently stored in ```text localStorage ```; secure ```httpOnly``` cookies would be preferable for a hardened production setup.
 - Refresh-token rotation is not implemented.
