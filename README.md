@@ -34,17 +34,17 @@ OpsDesk tackles the business problem of siloed data between departments by centr
 - **Production Deployment** — React frontend on Vercel, Dockerized Node/Express backend on Render, PostgreSQL on Neon.
 
 
-## ✨ Key Features
+##  Key Features
 
-- 🔐 **JWT Authentication + RBAC** — Admin, Sales, Warehouse and Accounts
-- 👥 **CRM** — customer management, search, filtering and follow-ups
-- 📦 **Inventory** — stock IN/OUT, alerts and movement history
-- 🧾 **Sales Challans** — Draft → Confirm → Cancel workflow
-- 📊 **Reports & Dashboard** — sales, customers, inventory and follow-up metrics
-- 📄 **PDF Export** — branded challan generation
-- ✅ **Validation** — strict Zod request validation and API error handling
-- 🐳 **Docker** — multi-stage backend container
-- 🧪 **Postman** — complete API collection with RBAC and validation scenarios
+-  **JWT Authentication + RBAC** — Admin, Sales, Warehouse and Accounts
+-  **CRM** — customer management, search, filtering and follow-ups
+-  **Inventory** — stock IN/OUT, alerts and movement history
+-  **Sales Challans** — Draft → Confirm → Cancel workflow
+-  **Reports & Dashboard** — sales, customers, inventory and follow-up metrics
+-  **PDF Export** — branded challan generation
+-  **Validation** — strict Zod request validation and API error handling
+-  **Docker** — multi-stage backend container
+-  **Postman** — complete API collection with RBAC and validation scenarios
 
 ## Architecture Summary
 - **Frontend**: React + TypeScript, Tailwind CSS, TanStack Query, React Hook Form + Zod for client-side validation.
@@ -52,7 +52,7 @@ OpsDesk tackles the business problem of siloed data between departments by centr
 - **Database**: PostgreSQL (hosted on Neon).
 - **Authentication**: JWT based authentication with short-expiry tokens.
 
-## 🏗️ Architecture
+##  Architecture
 
 ```text
                          ┌──────────────────────┐
@@ -113,7 +113,7 @@ OpsDesk-ERP/
 ```
 
 ##Core Business Workflow
-
+```
 Create Draft Challan
         ↓
       Confirm
@@ -130,7 +130,7 @@ Create Draft Challan
  Optional Cancellation
         ↓
   Optional Restock
-
+```
 ## Important business rules include:
 -  Draft challans do not perform final stock deduction.
 -  Confirmation validates available inventory.
@@ -172,17 +172,17 @@ Create Draft Challan
 
 ---
 
-Security
-JWT Authentication with server-side token verification.
-Backend RBAC using role authorization middleware.
-bcrypt Password Hashing for stored credentials.
-Zod Validation for API write/update payloads.
-Helmet for HTTP security headers.
-Authentication Rate Limiting to reduce brute-force attempts.
-Restricted CORS using the configured frontend origin.
-Sanitized Error Responses to avoid exposing internal details.
-Sensitive Field Protection so password hashes are not returned through normal API responses.
-Environment-based Secrets instead of committed credentials.
+## Security
+-  JWT Authentication with server-side token verification.
+-  Backend RBAC using role authorization middleware.
+-  bcrypt Password Hashing for stored credentials.
+-  Zod Validation for API write/update payloads.
+-  Helmet for HTTP security headers.
+-  Authentication Rate Limiting to reduce brute-force attempts.
+-  Restricted CORS using the configured frontend origin.
+-  Sanitized Error Responses to avoid exposing internal details.
+-  Sensitive Field Protection so password hashes are not returned through normal API responses.
+-  Environment-based Secrets instead of committed credentials.
 
 ##Security Trade-offs
 This is an assignment/MVP, so some hardening areas remain intentionally scoped:
@@ -198,8 +198,7 @@ A complete Postman collection is included:
 ```bash
 opsdesk_postman_collection.json
 ```
-It covers:
-
+## It covers:
 - Authentication
 - Customers / CRM
 - Products / Inventory
@@ -211,7 +210,7 @@ It covers:
 - RBAC scenarios
 - Challan PDF export
 
-Production API:
+##Production API:
 
 ```bash 
 https://opsdesk-backend.onrender.com/api 
@@ -222,7 +221,7 @@ The collection has been cross-checked against the backend routes and validation 
 
 Confirmed challans can be exported as professionally formatted PDFs.
 
-The generated document includes:
+## The generated document includes:
 
 - OpsDesk branding
 - Challan number
