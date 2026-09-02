@@ -442,18 +442,7 @@ http://localhost:5175
 
 ---
 
-## Bonus Features
-
-### 1. Export Challan as PDF ✨ (Fully Working)
-
-A professional PDF export is available directly from any Challan Detail page.
-
-- Click the **Export PDF** button in the bottom action bar on any challan.
-- The backend generates a structured PDF (OpsDesk-branded header, customer details, line-item table with **snapshot** data, grand total, footer) via the `pdfkit` library and streams it directly to the browser as a download.
-- Uses the endpoint `GET /api/challans/:id/pdf` — fully authenticated and role-protected.
-- PDF filenames follow the challan number format: `CH-2026-000001.pdf`.
-
-### 2. Docker Setup ✨ (Fully Working — tested locally)
+##  Docker Setup ✨ (Fully Working — tested locally)
 
 The entire stack can be run with a single command using Docker Compose.
 
