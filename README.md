@@ -443,7 +443,7 @@ http://localhost:5175
 
 ---
 
-##  Docker Setup ✨ (Fully Working — tested locally)
+##  Docker Setup  (Tested locally)
 
 The entire stack can be run with a single command using Docker Compose.
 
