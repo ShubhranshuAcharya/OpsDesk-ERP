@@ -8,33 +8,136 @@ It implements strict role-based access control and reliable, auditable business 
 
 OpsDesk tackles the business problem of siloed data between departments by centralizing customer management, CRM follow-ups, product/inventory operations, and sales challans. Designed for a wholesale/distribution workflow, it enforces role-based constraints across Sales, Warehouse, Accounts, and Admin teams while demonstrating robust full-stack engineering through transactional integrity, real-time metrics, and strict API authorization.
 
-## Live Demo
+## 🚀 Live Demo
 
-- **Frontend UI**: `TBD`
-- **Backend API**: `TBD`
+**Frontend:** https://opsdesk-delta.vercel.app/  
+**Backend API:** https://opsdesk-backend.onrender.com  
+**API Base:** https://opsdesk-backend.onrender.com/api
 
-## Recommended Demo Flow
+### Demo Credentials
 
-The fastest way to experience the full operational lifecycle:
-1. **Login as Admin** (`admin@example.com`) to explore the redesigned Reports analytics dashboard.
-2. **Login as Sales** (`sales@example.com`).
-3. Navigate to **Customers** and create a new customer lead.
-4. Navigate to **Sales Challans** and create a new challan for that customer, adding multiple line items.
-5. Save the challan as **Draft** and observe the pipeline state.
-6. **Confirm** the challan, and observe the immediate stock deduction.
-7. Click **Export PDF** on the confirmed challan detail page to generate the branded PDF.
-8. **Login as Warehouse** (`warehouse@example.com`) and navigate to the **Products & Inventory** module to view the documented "Net" stock movement history log reflecting the deduction.
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@example.com` | `admin123` |
+| Sales | `sales@example.com` | `sales123` |
+| Warehouse | `warehouse@example.com` | `warehouse123` |
+| Accounts | `accounts@example.com` | `accounts123` |
 
-## Key Engineering Highlights
+## ⭐ Key Engineering Highlights
 
-- **Backend-Enforced RBAC**: Authorization middleware strictly locks down routing; frontend visibility is backed by genuine API-level enforcement.
-- **Strict Zod Validation**: End-to-end type safety and payload validation ensure malformed data is rejected before hitting the database.
-- **PostgreSQL Relational Model via Prisma**: Strongly typed ORM mapping with foreign keys, constraints, and cascading rules.
-- **Transactional Integrity**: Critical operations, like concurrent inventory stock deductions, utilize atomic database operations to prevent race conditions.
-- **Product Snapshot Preservation**: Sales challans store immutable snapshots of product pricing and data to maintain historical accuracy even if the underlying product changes.
-- **Animated Data Visualization**: The frontend leverages `framer-motion` and custom SVGs to render responsive, mathematically proportioned charts and overlapping cluster graphs.
-- **PDF Generation**: Server-side document rendering utilizing `pdfkit` for immediate browser streaming.
-- **GitHub Actions CI**: Automated linting and building workflows trigger on every push/PR to maintain codebase quality.
+- **Backend-Enforced RBAC** — role authorization is enforced through API middleware rather than relying only on frontend visibility.
+- **Strict API Validation** — request payloads are validated with Zod before reaching business logic/database operations.
+- **Transactional Inventory Operations** — critical stock-changing workflows use database transactions and atomic stock updates.
+- **Product Snapshot Preservation** — challan items retain historical product information so previously issued documents remain stable when catalog data changes.
+- **Auditable Inventory** — stock changes create corresponding movement records with quantity, type, reason, user, and timestamps.
+- **PDF Generation** — server-side challan PDF generation using PDFKit.
+- **Production Deployment** — React frontend on Vercel, Dockerized Node/Express backend on Render, PostgreSQL on Neon.
+
+
+## ✨ Key Features
+
+- 🔐 **JWT Authentication + RBAC** — Admin, Sales, Warehouse and Accounts
+- 👥 **CRM** — customer management, search, filtering and follow-ups
+- 📦 **Inventory** — stock IN/OUT, alerts and movement history
+- 🧾 **Sales Challans** — Draft → Confirm → Cancel workflow
+- 📊 **Reports & Dashboard** — sales, customers, inventory and follow-up metrics
+- 📄 **PDF Export** — branded challan generation
+- ✅ **Validation** — strict Zod request validation and API error handling
+- 🐳 **Docker** — multi-stage backend container
+- 🧪 **Postman** — complete API collection with RBAC and validation scenarios
+
+## Architecture Summary
+- **Frontend**: React + TypeScript, Tailwind CSS, TanStack Query, React Hook Form + Zod for client-side validation.
+- **Backend**: Node.js + TypeScript, Express.js, Prisma ORM, Zod for strict server-side validation.
+- **Database**: PostgreSQL (hosted on Neon).
+- **Authentication**: JWT based authentication with short-expiry tokens.
+
+## 🏗️ Architecture
+
+```text
+                         ┌──────────────────────┐
+                         │        GitHub        │
+                         │   OpsDesk-ERP Repo   │
+                         └──────────┬───────────┘
+                                    │
+                    ┌───────────────┴────────────────┐
+                    │                                │
+                    ▼                                ▼
+          ┌──────────────────┐             ┌─────────────────────┐
+          │ Vercel           │             │ Render              │
+          │ React + Vite     │   HTTPS     │ Node + Express      │
+          │ Frontend         │ ──────────► │ TypeScript API      │
+          └──────────────────┘             │                     │
+                                           │ JWT Authentication  │
+                                           │ RBAC Authorization  │
+                                           │ Zod Validation      │
+                                           │ Business Logic      │
+                                           │ Prisma ORM          │
+                                           └──────────┬──────────┘
+                                                      │
+                                                      ▼
+                                           ┌─────────────────────┐
+                                           │ Neon PostgreSQL     │
+                                           │ Relational Database │
+                                           └─────────────────────┘
+```
+
+## Repository Structure:
+
+```text
+
+OpsDesk-ERP/
+├── frontend/                    # React + TypeScript + Vite
+│   └── src/
+│
+├── backend/                     # Node.js + Express + TypeScript
+│   ├── src/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── types/
+│   │   ├── db.ts
+│   │   └── index.ts
+│   │
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── migrations/
+│   │   └── seed.ts
+│   │
+│   ├── .env.example
+│   ├── .dockerignore
+│   └── Dockerfile
+│
+├── docker-compose.yml
+├── opsdesk_postman_collection.json
+└── README.md
+```
+
+##Core Business Workflow
+
+Create Draft Challan
+        ↓
+      Confirm
+        ↓
+  Validate Stock
+        ↓
+ Transactional /
+ Atomic Stock Update
+        ↓
+ Create Stock Movement
+        ↓
+    CONFIRMED
+        ↓
+ Optional Cancellation
+        ↓
+  Optional Restock
+
+## Important business rules include:
+-  Draft challans do not perform final stock deduction.
+-  Confirmation validates available inventory.
+-  Stock cannot be reduced below the available quantity.
+-  Confirmed transactions create stock movement records.
+-  Challan cancellation can optionally restore stock.
+-  Product snapshot data is preserved for historical accuracy. 
 
 ## Role-Based Access
 
@@ -50,36 +153,235 @@ The fastest way to experience the full operational lifecycle:
 | Access Reports Dashboard | ✓ | — | — | ✓ |
 | Export Challan PDF | ✓ | ✓ | ✓ | ✓ |
 
-## Architecture Summary
-- **Frontend**: React + TypeScript, Tailwind CSS, TanStack Query, React Hook Form + Zod for client-side validation.
-- **Backend**: Node.js + TypeScript, Express.js, Prisma ORM, Zod for strict server-side validation.
-- **Database**: PostgreSQL (hosted on Neon).
-- **Authentication**: JWT based authentication with short-expiry tokens.
 
-### System Architecture Diagram
-```text
-Browser Client (React)
-          ↓
-  TanStack Query (Caching/Sync)
-          ↓
-  Vite / Nginx (Static Serving)
-          ↓
-=================================
-          ↓
-  Express REST API Layer
-          ↓
-  Authentication Middleware (JWT)
-          ↓
-  RBAC + Zod Validation Middleware
-          ↓
-  Business Logic (Controllers)
-          ↓
-  Prisma ORM (Data Access)
-          ↓
-=================================
-          ↓
-  PostgreSQL Database (Neon)
+## Project Status
+
+| Area | Status |
+|---|---|
+| Frontend | ✅ Live on Vercel |
+| Backend | ✅ Live on Render |
+| PostgreSQL | ✅ Live on Neon |
+| Authentication | ✅ Verified |
+| RBAC | ✅ Implemented |
+| Customer CRM | ✅ Implemented |
+| Inventory | ✅ Verified |
+| Challan Workflow | ✅ Verified |
+| Stock Audit Trail | ✅ Verified |
+| PDF Export | ✅ Implemented |
+| Postman Collection | ✅ Included |
+
+---
+
+Security
+JWT Authentication with server-side token verification.
+Backend RBAC using role authorization middleware.
+bcrypt Password Hashing for stored credentials.
+Zod Validation for API write/update payloads.
+Helmet for HTTP security headers.
+Authentication Rate Limiting to reduce brute-force attempts.
+Restricted CORS using the configured frontend origin.
+Sanitized Error Responses to avoid exposing internal details.
+Sensitive Field Protection so password hashes are not returned through normal API responses.
+Environment-based Secrets instead of committed credentials.
+
+##Security Trade-offs
+This is an assignment/MVP, so some hardening areas remain intentionally scoped:
+
+- JWTs are currently stored in ```text localStorage ```; secure ```httpOnly``` cookies would be preferable for a hardened production setup.
+- Refresh-token rotation is not implemented.
+- Higher-concurrency inventory workloads may benefit from stronger row-level concurrency controls.
+- The setup-only admin seed endpoint should be disabled/removed for hardened production use.
+
+## API & Testing
+A complete Postman collection is included:
+
+```bash
+opsdesk_postman_collection.json
 ```
+It covers:
+
+- Authentication
+- Customers / CRM
+- Products / Inventory
+- Sales Challans
+- Dashboard / Reports
+- Reminders / Notifications
+- Users / Roles
+- Validation scenarios
+- RBAC scenarios
+- Challan PDF export
+
+Production API:
+
+```bash 
+https://opsdesk-backend.onrender.com/api 
+```
+The collection has been cross-checked against the backend routes and validation schemas, with selected requests manually verified against the deployed API.
+
+## 📄 Challan PDF Export
+
+Confirmed challans can be exported as professionally formatted PDFs.
+
+The generated document includes:
+
+- OpsDesk branding
+- Challan number
+- Customer details
+- Product line items
+- Snapshot product information
+- Quantities
+- Unit prices
+- Totals
+- Footer / document metadata
+
+Endpoint:
+
+```text
+GET /api/challans/:id/pdf
+```
+
+---
+
+# 🚀 Production Deployment
+
+| Layer | Platform |
+|---|---|
+| Frontend | **Vercel** |
+| Backend | **Render + Docker** |
+| Database | **Neon PostgreSQL** |
+
+### Frontend
+
+Production frontend:
+
+```text
+https://opsdesk-delta.vercel.app/
+```
+
+Vercel configuration:
+
+```text
+Framework: Vite
+Root Directory: frontend
+```
+
+Build-time variable:
+
+```env
+VITE_API_URL=https://opsdesk-backend.onrender.com/api
+```
+
+### Backend
+
+Production backend:
+
+```text
+https://opsdesk-backend.onrender.com
+```
+
+Render configuration:
+
+```text
+Root Directory: backend
+Docker Build Context: backend/
+Dockerfile: Dockerfile
+```
+
+Backend environment variables:
+
+```text
+DATABASE_URL=<configured in Render>
+JWT_SECRET=<configured in Render>
+CORS_ORIGIN=https://opsdesk-delta.vercel.app
+```
+
+The application reads the runtime `PORT` provided by the hosting platform and falls back to `3001` for local development.
+
+---
+
+## 🐳 Docker
+
+A multi-stage Docker setup is included for reproducible local deployment.
+
+The backend container:
+
+- Builds TypeScript in a dedicated builder stage.
+- Generates the Prisma Client during the build.
+- Uses production dependencies in the runtime stage.
+- Includes the Prisma CLI required for production migrations.
+- Runs as the non-root `node` user.
+- Applies Prisma migrations before starting the backend.
+
+### Full local stack
+
+```bash
+docker compose up --build
+```
+
+Apply migrations:
+
+```bash
+docker compose exec backend npx prisma migrate deploy
+```
+
+Seed data:
+
+```bash
+docker compose exec backend npx prisma db seed
+```
+
+> Local Docker execution requires Docker Desktop/WSL or another Docker-enabled environment.
+
+---
+
+## 💻 Local Development
+
+### Backend
+
+```bash
+cd backend
+npm install
+```
+
+Create `.env` from `.env.example`.
+
+Then:
+
+```bash
+npx prisma migrate dev
+npm run db:seed
+npm run dev
+```
+
+Backend:
+
+```text
+http://localhost:3001
+```
+
+API:
+
+```text
+http://localhost:3001/api
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend:
+
+```text
+http://localhost:5175
+```
+
+---
+
+
 
 ## Local Setup Steps
 
@@ -122,16 +424,6 @@ Browser Client (React)
 
 ---
 
-## Test Login Credentials (seeded automatically)
-
-| Role      | Email | Password |
-| ----------- | ----------- | ----------- |
-| **Admin** | admin@example.com | admin123 |
-| **Sales** | sales@example.com | sales123 |
-| **Warehouse** | warehouse@example.com | warehouse123 |
-| **Accounts** | accounts@example.com | accounts123 |
-
-*(Note: These credentials are auto-filled via buttons on the development login screen for easy testing).*
 
 ---
 
@@ -197,62 +489,4 @@ docker compose down        # stop (data preserved)
 docker compose down -v     # DANGER: also destroys database volume
 ```
 
-### 3. GitHub Actions CI/CD ✨ (CI passing — deploy workflow implemented)
 
-Two workflow files are in `.github/workflows/`:
-
-**`ci.yml` — Lint & Build** (runs on every push/PR to `main`)
-- **Backend job**: `npm ci` → Prisma generate → `tsc --noEmit` → `npm run build`
-- **Frontend job**: `npm ci` → `npm run lint` → `tsc --noEmit` → `npm run build`
-
-This CI is fully functional and passes on push to the repository.
-
-**`deploy.yml` — Deploy to Render** (triggers after CI passes on `main`)
-- Fires Render's deploy hook URL via `curl POST`.
-- **Requires the following GitHub repo secret to activate:**
-  - Go to: **Settings → Secrets and variables → Actions → New repository secret**
-  - Name: `RENDER_DEPLOY_HOOK_URL`
-  - Value: Your Render service's deploy hook URL (from the Render dashboard → Settings → Deploy Hook)
-
-> **Note**: The deploy workflow is implemented and correct, but has not been triggered against a live Render service (no live deployment is configured). If the Render deploy hook URL secret is added, deploys will trigger automatically after CI passes.
-
-**Frontend deployment via Vercel/Netlify**: Connect the GitHub repo directly via their Git integration — no custom Action is needed. Set `VITE_API_URL` to your live Render backend URL in the Vercel project environment variables.
-
----
-
-## Known Limitations & Assumptions
-
-- **Database**: The system runs on a production-grade PostgreSQL database hosted on Neon, fulfilling the assignment specification.
-- **Concurrency Control**: With the migration to PostgreSQL, explicit `SELECT ... FOR UPDATE` locks or optimistic concurrency control should be implemented in `challans.ts` as a future enhancement to guarantee safety during simultaneous stock deductions.
-- **Reporting Exports**: PDF export is now implemented for Sales Challans. CSV/aggregate exports for the Reports page are a planned future improvement.
-- **Auth**: JWTs are issued with short expiries for security. A refresh token rotation flow is recommended before wide production release.
-- **Users & Roles**: Admin users can manage system access via the Users & Roles module.
-- **Reports**: Admins and Accounts users have access to aggregated business reports.
-
-## Security
-
-This project implements strict, defense-in-depth security measures appropriate for a production-grade internal portal, prioritizing data integrity and access control.
-
-### Authentication & Access Control
-- **Password Hashing:** All user passwords are computationally hashed using `bcrypt` (10–12 salt rounds) before storage; raw passwords are never saved.
-- **Stateless JWTs:** Authentication is managed via JSON Web Tokens. Tokens are cryptographically verified server-side on every protected API request via middleware, ensuring client-side manipulation is impossible.
-- **Role-Based Access Control (RBAC):** Authorization is enforced at the API routing layer using a strict `authorize(['ROLE'])` middleware, ensuring users cannot access endpoints outside their granted permissions.
-- **Login Hardening:** The login endpoint is protected by a strict rate limiter (max requests per 15-minute window) to prevent brute-force attacks. Failed attempts return a generic "Invalid email or password" to prevent user enumeration.
-
-### Data Protection & API Hardening
-- **Strict Input Validation:** Every write/update endpoint validates payloads through strict `Zod` schemas before touching the database, guaranteeing type safety and malformed data rejection.
-- **SQL Injection Prevention:** All database operations utilize the Prisma ORM. No raw, unparameterized SQL queries (`$queryRaw`) are used in the codebase.
-- **Concurrent Data Integrity:** Critical business logic, such as inventory stock deduction, utilizes atomic database operations (`decrement`/`increment`) within transactions rather than application-level math, preventing "Lost Update" race conditions under concurrent load.
-- **CORS Restriction:** Cross-Origin Resource Sharing is strictly locked down to the exact frontend domain specified in the `CORS_ORIGIN` production environment variable.
-- **Safe Error Handling:** Production error boundaries prevent internal stack traces or database errors from leaking to the client; API responses return sanitized, generic error strings on 500s.
-- **Data Minimization:** API responses are explicitly shaped (e.g., via Prisma `select`) to ensure sensitive fields, such as `passwordHash`, are never returned to the frontend.
-- **Secrets Management:** Environment variables (`.env`) are strictly gitignored, and the backend guarantees a fatal crash on startup if required secrets (`JWT_SECRET`, `CORS_ORIGIN`) are missing, preventing insecure default states.
-
-### Known Tradeoffs
-Given the 48-hour project timeline, the following deliberate scoping decisions were made:
-- **JWT Storage:** Tokens are currently stored in `localStorage` on the frontend for implementation speed. For a full production release, migrating to secure `httpOnly` cookies is recommended to mitigate XSS token theft.
-- **Global Rate Limiting:** Rate limiting is currently targeted specifically at the authentication routes to prevent brute-forcing. It is not applied globally to all API routes to avoid complicating local development and testing.
-- **Token Rotation:** The system relies on short-lived JWTs. A full refresh-token rotation architecture was out of scope for this MVP.
-## Included Assets
-- **Postman Collection**: `opsdesk_postman_collection.json` is included in the project root for testing APIs.
-- **Concurrency Test**: `backend/test-concurrency.js` is included to verify transaction locking behavior.
