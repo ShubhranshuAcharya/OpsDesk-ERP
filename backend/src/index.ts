@@ -21,7 +21,8 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
-if (!process.env.CORS_ORIGIN) {
+const corsOrigin = process.env.CORS_ORIGIN;
+if (!corsOrigin) {
   console.error("FATAL ERROR: CORS_ORIGIN environment variable is not defined.");
   process.exit(1);
 }
@@ -32,7 +33,7 @@ const port = process.env.PORT || 3001;
 app.use(helmet());
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = process.env.CORS_ORIGIN.split(',').map(o => o.trim());
+    const allowedOrigins = corsOrigin.split(',').map(o => o.trim());
     
     // Always allow explicitly configured origins
     if (!origin || allowedOrigins.includes(origin)) {
@@ -86,3 +87,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+
