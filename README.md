@@ -8,20 +8,6 @@ It implements strict role-based access control and reliable, auditable business 
 
 OpsDesk tackles the business problem of siloed data between departments by centralizing customer management, CRM follow-ups, product/inventory operations, and sales challans. Designed for a wholesale/distribution workflow, it enforces role-based constraints across Sales, Warehouse, Accounts, and Admin teams while demonstrating robust full-stack engineering through transactional integrity, real-time metrics, and strict API authorization.
 
-## 🚀 Live Demo
-
-**Frontend:** https://opsdesk-delta.vercel.app/  
-**Backend API:** https://opsdesk-backend.onrender.com  
-**API Base:** https://opsdesk-backend.onrender.com/api
-
-### Demo Credentials
-
-| Role | Email | Password |
-|---|---|---|
-| Admin | `admin@example.com` | `admin123` |
-| Sales | `sales@example.com` | `sales123` |
-| Warehouse | `warehouse@example.com` | `warehouse123` |
-| Accounts | `accounts@example.com` | `accounts123` |
 
 ## ⭐ Key Engineering Highlights
 
@@ -32,6 +18,21 @@ OpsDesk tackles the business problem of siloed data between departments by centr
 - **Auditable Inventory** — stock changes create corresponding movement records with quantity, type, reason, user, and timestamps.
 - **PDF Generation** — server-side challan PDF generation using PDFKit.
 - **Production Deployment** — React frontend on Vercel, Dockerized Node/Express backend on Render, PostgreSQL on Neon.
+
+### Demo Credentials
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@example.com` | `admin123` |
+| Sales | `sales@example.com` | `sales123` |
+| Warehouse | `warehouse@example.com` | `warehouse123` |
+| Accounts | `accounts@example.com` | `accounts123` |
+
+## 🚀 Live Demo
+
+**Frontend:** https://opsdesk-delta.vercel.app/  
+**Backend API:** https://opsdesk-backend.onrender.com  
+**API Base:** https://opsdesk-backend.onrender.com/api
 
 
 ##  Key Features
@@ -45,12 +46,6 @@ OpsDesk tackles the business problem of siloed data between departments by centr
 -  **Validation** — strict Zod request validation and API error handling
 -  **Docker** — multi-stage backend container
 -  **Postman** — complete API collection with RBAC and validation scenarios
-
-## Architecture Summary
-- **Frontend**: React + TypeScript, Tailwind CSS, TanStack Query, React Hook Form + Zod for client-side validation.
-- **Backend**: Node.js + TypeScript, Express.js, Prisma ORM, Zod for strict server-side validation.
-- **Database**: PostgreSQL (hosted on Neon).
-- **Authentication**: JWT based authentication with short-expiry tokens.
 
 ##  Architecture
 
@@ -81,6 +76,12 @@ OpsDesk tackles the business problem of siloed data between departments by centr
                                            │ Relational Database │
                                            └─────────────────────┘
 ```
+
+## Architecture Summary
+- **Frontend**: React + TypeScript, Tailwind CSS, TanStack Query, React Hook Form + Zod for client-side validation.
+- **Backend**: Node.js + TypeScript, Express.js, Prisma ORM, Zod for strict server-side validation.
+- **Database**: PostgreSQL (hosted on Neon).
+- **Authentication**: JWT based authentication with short-expiry tokens.
 
 ## Repository Structure:
 
