@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Base & Layout */
+  --color-bg-base: #F7F8FA;
+  --color-bg-surface: #FFFFFF;
+  --color-border-default: #E4E7EC;
+  --color-border-strong: #D0D5DD;
+  
+  /* Typography */
+  --color-text-primary: #101828;
+  --color-text-secondary: #475467;
+  --color-text-muted: #98A2B3;
+  
+  /* Brand */
+  --color-primary: #2E5AAC;
+  --color-primary-hover: #24478A;
+  /* Tints */
+  --color-success: #17B26A;
+  --color-success-bg: #ECFDF3;
+  --color-warning: #F79009;
+  --color-warning-bg: #FFFAEB;
+  --color-danger: #D92D20;
+  --color-danger-bg: #FEF3F2;
+  --color-info: #475467;
+  --color-info-bg: #F2F4F7;
+  
+  /* Waves */
+  --color-wave-back: #2E5AAC;
+  --color-wave-mid: #5B8DEF;
+  --color-wave-front: #9DC0FA;
+}
