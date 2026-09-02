@@ -477,5 +477,9 @@ docker compose up          # start
 docker compose down        # stop (data preserved)
 docker compose down -v     # DANGER: also destroys database volume
 ```
+## Future Enhancements
 
+Future iterations could introduce advanced analytics, automated notifications, accounting and payment integrations, barcode-based inventory management, audit logging, bulk data operations, and more granular reporting and access controls.
+
+The current system provides a scalable foundation for extending these capabilities as business requirements evolve.
 
