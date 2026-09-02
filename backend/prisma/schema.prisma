@@ -1,0 +1,189 @@
+// ============================================================
+// Mini ERP + CRM Operations Portal — Prisma Schema (Phase 1)
+// Database: PostgreSQL
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums removed for SQLite compatibility
+// MODELS
+// ------------------------------------------------------------
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations — audit trail ownership
+  customersCreated      Customer[]          @relation("CustomerCreatedBy")
+  followUpNotes         FollowUpNote[]      @relation("FollowUpNoteCreatedBy")
+  stockMovementsCreated StockMovementLog[]  @relation("StockMovementCreatedBy")
+  challansCreated       SalesChallan[]      @relation("ChallanCreatedBy")
+  reminders             Reminder[]
+
+  @@map("users")
+}
+
+model Reminder {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  scheduledFor DateTime
+  notified     Boolean  @default(false)
+  completed    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([scheduledFor])
+  @@map("reminders")
+}
+
+model Customer {
+  id            String         @id @default(uuid())
+  name          String
+  mobile        String
+  email         String?
+  businessName  String?
+  gstNumber     String?
+  customerType  String
+  address       String?
+  status        String @default("LEAD")
+  followUpDate  DateTime?
+  notes         String?
+
+  createdById   String
+  createdBy     User           @relation("CustomerCreatedBy", fields: [createdById], references: [id])
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  followUpNotes FollowUpNote[]
+  challans      SalesChallan[]
+
+  @@index([mobile])
+  @@index([status])
+  @@map("customers")
+}
+
+model FollowUpNote {
+  id          String   @id @default(uuid())
+  note        String
+
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  createdById String
+  createdBy   User     @relation("FollowUpNoteCreatedBy", fields: [createdById], references: [id])
+
+  createdAt   DateTime @default(now())
+
+  @@index([customerId])
+  @@map("follow_up_notes")
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  name          String
+  sku           String   @unique
+  category      String?
+  unitPrice     Float
+  currentStock  Int      @default(0)
+  minStockAlert Int      @default(0)
+  location      String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  stockMovements StockMovementLog[]
+  challanItems   ChallanItem[]
+
+  @@index([sku])
+  @@map("products")
+}
+
+// Immutable audit log — every stock change is recorded here.
+// Written inside the same transaction as the triggering action
+// (manual adjustment OR challan confirmation).
+model StockMovementLog {
+  id           String       @id @default(uuid())
+
+  productId    String
+  product      Product      @relation(fields: [productId], references: [id])
+
+  quantity     Int
+  movementType String
+  reason       String
+
+  createdById  String
+  createdBy    User         @relation("StockMovementCreatedBy", fields: [createdById], references: [id])
+
+  createdAt    DateTime     @default(now())
+
+  @@index([productId])
+  @@index([createdAt])
+  @@map("stock_movement_logs")
+}
+
+model SalesChallan {
+  id             String        @id @default(uuid())
+  challanNumber  String        @unique // auto-generated, e.g. CH-2026-000123
+
+  customerId     String
+  customer       Customer      @relation(fields: [customerId], references: [id])
+
+  status         String @default("DRAFT")
+  totalQuantity  Int           @default(0)
+
+  createdById    String
+  createdBy      User          @relation("ChallanCreatedBy", fields: [createdById], references: [id])
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  confirmedAt    DateTime?     // set only when status transitions to CONFIRMED
+
+  items          ChallanItem[]
+
+  @@index([customerId])
+  @@index([status])
+  @@map("sales_challans")
+}
+
+// Line item stores a SNAPSHOT of the product at time of sale.
+// productId is kept for traceability/reporting, but productName,
+// productSku, and unitPrice are copied values — NOT live lookups —
+// so historical challans remain accurate if the product changes later.
+model ChallanItem {
+  id            String       @id @default(uuid())
+
+  challanId     String
+  challan       SalesChallan @relation(fields: [challanId], references: [id], onDelete: Cascade)
+
+  productId     String
+  product       Product      @relation(fields: [productId], references: [id])
+
+  // --- snapshot fields (immutable once written) ---
+  productName   String
+  productSku    String
+  unitPrice     Float
+  // --------------------------------------------------
+
+  quantity      Int
+  lineTotal     Float
+
+  @@index([challanId])
+  @@index([productId])
+  @@map("challan_items")
+}
