@@ -8,17 +8,6 @@ It implements strict role-based access control and reliable, auditable business 
 
 OpsDesk tackles the business problem of siloed data between departments by centralizing customer management, CRM follow-ups, product/inventory operations, and sales challans. Designed for a wholesale/distribution workflow, it enforces role-based constraints across Sales, Warehouse, Accounts, and Admin teams while demonstrating robust full-stack engineering through transactional integrity, real-time metrics, and strict API authorization.
 
-
-## ⭐ Key Engineering Highlights
-
-- **Backend-Enforced RBAC** — role authorization is enforced through API middleware rather than relying only on frontend visibility.
-- **Strict API Validation** — request payloads are validated with Zod before reaching business logic/database operations.
-- **Transactional Inventory Operations** — critical stock-changing workflows use database transactions and atomic stock updates.
-- **Product Snapshot Preservation** — challan items retain historical product information so previously issued documents remain stable when catalog data changes.
-- **Auditable Inventory** — stock changes create corresponding movement records with quantity, type, reason, user, and timestamps.
-- **PDF Generation** — server-side challan PDF generation using PDFKit.
-- **Production Deployment** — React frontend on Vercel, Dockerized Node/Express backend on Render, PostgreSQL on Neon.
-
 ### Demo Credentials
 
 | Role | Email | Password |
@@ -138,7 +127,17 @@ Create Draft Challan
 -  Stock cannot be reduced below the available quantity.
 -  Confirmed transactions create stock movement records.
 -  Challan cancellation can optionally restore stock.
--  Product snapshot data is preserved for historical accuracy. 
+-  Product snapshot data is preserved for historical accuracy.
+
+## ⭐ Key Engineering Highlights
+
+- **Backend-Enforced RBAC** — role authorization is enforced through API middleware rather than relying only on frontend visibility.
+- **Strict API Validation** — request payloads are validated with Zod before reaching business logic/database operations.
+- **Transactional Inventory Operations** — critical stock-changing workflows use database transactions and atomic stock updates.
+- **Product Snapshot Preservation** — challan items retain historical product information so previously issued documents remain stable when catalog data changes.
+- **Auditable Inventory** — stock changes create corresponding movement records with quantity, type, reason, user, and timestamps.
+- **PDF Generation** — server-side challan PDF generation using PDFKit.
+- **Production Deployment** — React frontend on Vercel, Dockerized Node/Express backend on Render, PostgreSQL on Neon.
 
 ## Role-Based Access
 
