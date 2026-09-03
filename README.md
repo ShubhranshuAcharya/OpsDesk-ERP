@@ -210,7 +210,7 @@ opsdesk_postman_collection.json
 - RBAC scenarios
 - Challan PDF export
 
-![OpsDesk Postman API Testing](Postman%20API%20Documentation.png)
+![OpsDesk Postman API Testing](assets/Postman%20API%20Documentation.png)
 
 ## Production API:
 
