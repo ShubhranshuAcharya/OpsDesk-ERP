@@ -23,6 +23,7 @@ OpsDesk tackles the business problem of siloed data between departments by centr
 **Backend API:** https://opsdesk-backend.onrender.com  
 **API Base:** https://opsdesk-backend.onrender.com/api
 
+![OpsDesk Dashboard](assets/Dashboard%20Page.png)
 
 ##  Key Features
 
