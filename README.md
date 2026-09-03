@@ -252,6 +252,8 @@ GET /api/challans/:id/pdf
 | Backend | **Render + Docker** |
 | Database | **Neon PostgreSQL** |
 
+![Neon PostgreSQL Database Schema](assets/Neon%20Database.png)
+
 ### Frontend
 
 Production frontend:
@@ -296,6 +298,7 @@ DATABASE_URL=<configured in Render>
 JWT_SECRET=<configured in Render>
 CORS_ORIGIN=https://opsdesk-delta.vercel.app
 ```
+![Render Backend Deployment Logs](assets/Render%20Deployment.png)
 
 The application reads the runtime `PORT` provided by the hosting platform and falls back to `3001` for local development.
 
