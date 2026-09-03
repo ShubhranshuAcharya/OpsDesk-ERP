@@ -209,8 +209,10 @@ opsdesk_postman_collection.json
 - Validation scenarios
 - RBAC scenarios
 - Challan PDF export
-![OpsDesk Postman API Testing](image_135c05.jpg)
-##Production API:
+
+![OpsDesk Postman API Testing](Postman API Documentation.png)
+
+## Production API:
 
 ```bash 
 https://opsdesk-backend.onrender.com/api 
